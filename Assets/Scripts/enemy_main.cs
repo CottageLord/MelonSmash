@@ -35,12 +35,6 @@ public class enemy_main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // for test only
-        
-        if(Input.GetKeyDown(KeyCode.N))      { state = ENEMY_NORMAL; }
-        else if(Input.GetKeyDown(KeyCode.K)) { state = ENEMY_KICKED; }
-        else if(Input.GetKeyDown(KeyCode.S)) { being_stunned();}
-        else if(Input.GetKeyDown(KeyCode.A)) { state = ENEMY_ATTRACTED; }
         
         switch(state)
         {
