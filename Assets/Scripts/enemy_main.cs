@@ -9,6 +9,9 @@ public class enemy_main : MonoBehaviour
     private Vector3        enemy_move_direction;
     private Vector3        enemy_attracted_pos;
     public  int            health = 10;
+    [HideInInspector] public GameObject scriptAObject;
+    ItemThrowVersion2 scriptA;
+    public float timeForDamage;
 
     
     public  const int      ENEMY_NORMAL     = 1;
@@ -18,7 +21,7 @@ public class enemy_main : MonoBehaviour
 
     private int            stunned_effect_second   = 3;
     private int            attracted_effect_second = 3;
-    private int            kicked_effect_second    = 3;
+    [HideInInspector] public int             kicked_effect_second    = 3;
 
     private int            state;
     private float          stunned_range = 0.3f;
@@ -35,7 +38,13 @@ public class enemy_main : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // for test only
         
+        if(Input.GetKeyDown(KeyCode.N))      { state = ENEMY_NORMAL; }
+        else if(Input.GetKeyDown(KeyCode.K)) { state = ENEMY_KICKED; }
+        else if(Input.GetKeyDown(KeyCode.J)) { being_stunned();}
+        else if(Input.GetKeyDown(KeyCode.L)) { state = ENEMY_ATTRACTED; }
+
         switch(state)
         {
             case ENEMY_NORMAL:
@@ -52,9 +61,9 @@ public class enemy_main : MonoBehaviour
                  * note that if an enemy is in "kicked" state
                  * it can never be in another state (ie. cannot be stunned when flying)
                  */
-                 // enemy_speed ^ 2 means flying faster than walking, also represent the
-                 // enemies' weight (walk slower -> heavier -> fly slower)
-                this.transform.position +=  enemy_speed * enemy_speed * enemy_move_direction * Time.deltaTime;
+                // enemy_speed ^ 2 means flying faster than walking, also represent the
+                // enemies' weight (walk slower -> heavier -> fly slower)
+                this.transform.position += enemy_speed * enemy_speed * enemy_move_direction * Time.deltaTime;
                 break;
             case ENEMY_STUNNED:
                 this.transform.position = this.transform.position + (stunned_range * new Vector3(1, 0, 0));
@@ -80,11 +89,12 @@ public class enemy_main : MonoBehaviour
         }
         
         // if died or reached the end point, self-destruction
-        if(health <= 0 || where_to_go.tag == "objectDestroyer"){
+        if(health <= 0 || where_to_go.tag == "objectDestroyer")
+        {
             Destroy(this.gameObject);
+
         }
     }
-
     // after x seconds, a effect_ended signal will be released
     // then enemy will back to normal
     IEnumerator wait_for_seconds(int seconds)
@@ -105,7 +115,6 @@ public class enemy_main : MonoBehaviour
         Destroy(this.gameObject);
     }
 
-
     void being_attracted(Vector3 melon_pos) {
         state = ENEMY_ATTRACTED;
         enemy_attracted_pos = melon_pos;
@@ -117,7 +126,7 @@ public class enemy_main : MonoBehaviour
         StartCoroutine(wait_for_seconds(stunned_effect_second));
     }
     // get kicked direction from character script
-    void being_kicked(Vector3 kicked_direction) {
+    public void being_kicked(Vector3 kicked_direction) {
         state = ENEMY_KICKED;
         enemy_move_direction = Vector3.Normalize(kicked_direction);
         StartCoroutine(kicked_for_seconds(kicked_effect_second));
@@ -126,5 +135,20 @@ public class enemy_main : MonoBehaviour
     void take_damage(int damage) {
         health -= damage;
         Debug.Log("Uhhhhh " + health);
+    }
+
+    void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Itemthrown")
+        {
+            scriptAObject = collider.gameObject;
+            scriptA = scriptAObject.GetComponent<ItemThrowVersion2>();
+            scriptA.itemExploded2 = true;
+            if (scriptA.itemExploded2 == true && scriptA.itemAliveTime <= timeForDamage && scriptA.itemAliveTime > 0)
+            {
+                scriptA.itemExploded2 = false;
+                take_damage(scriptA.damage);
+            }
+        }
     }
 }
