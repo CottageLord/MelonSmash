@@ -42,7 +42,7 @@ public class SpawnEnemy : MonoBehaviour
     void SpawnEnemyPrefab()
     {
         //Spawns enemy at the location of SpawnPoint game object
-        Instantiate(spawnPrefab, transform.position, transform.rotation);
-        spawnPrefab.where_to_go = initialMoveTarget;
+        enemy_main spawned = Instantiate(spawnPrefab, transform.position, transform.rotation);
+        spawned.where_to_go = initialMoveTarget;
     }
 }

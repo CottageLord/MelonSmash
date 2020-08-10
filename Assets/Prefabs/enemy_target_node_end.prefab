@@ -44,4 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   next_target: {fileID: 0}
-  arrival_radius: 0.1
+  arrival_radius: 0.6
