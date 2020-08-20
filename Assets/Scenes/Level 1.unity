@@ -5841,7 +5841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3768747b080e32241a8eed50a08e6b01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnPrefab: {fileID: -8359649852847832208, guid: 9c4f7e6106dfc774185e0c8e5565ba01,
+  spawnPrefab: {fileID: 3046112369316038690, guid: e9f69d0b265654c429ac19c8579c4134,
     type: 3}
   initialMoveTarget: {fileID: 848741076}
   minSpawnInterval: 3
